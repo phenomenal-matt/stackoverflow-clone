@@ -7,3 +7,14 @@ cache:
 
 services: 
       -mongodb
+
+before_script:
+  - sleep 15
+
+env:
+  global:
+    - NODE_ENV=test
+    - PORT=9001
+    - JWT_SECRET=Hkv6IMQtlOxq7rour7CFniraPrXOBoEZ
+    - JWT_EXPIRATION_MINUTES=15
+    - MONGO_URI_TESTS=mongodb://localhost:27017/stackoverflow-mock_test
