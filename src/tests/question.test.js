@@ -160,7 +160,6 @@ describe('Question API', () => {
         .send(answer)
         .set('Authorization', token);
 
-      console.log(JSON.stringify(response.body));
       expect(response.status).to.eqls(httpStatus.OK);
       expect(response.body.result).to.eqls('SUCCESS');
       expect(response.body.data).to.be.an('object');
@@ -172,8 +171,6 @@ describe('Question API', () => {
         .post(`/v1/questions/${questionId}`)
         .send(answer);
 
-      console.log(JSON.stringify(response.body));
-
       expect(response.status).to.eqls(httpStatus.UNAUTHORIZED);
       expect(response.body.message).to.be.equal('Authorization is required');
       expect(response.body.result).to.be.equal('ERROR');
@@ -184,8 +181,6 @@ describe('Question API', () => {
         .post('/v1/questions/5e37e6a4686cfb017dec618b')
         .send(answer)
         .set('Authorization', token);
-
-      console.log(JSON.stringify(response.body));
 
       expect(response.status).to.eqls(httpStatus.NOT_FOUND);
       expect(response.body.result).to.be.equal('ERROR');
