@@ -22,6 +22,10 @@ module.exports = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (err) {
-    next(err);
+    const error = new APIError({
+      message: err.message,
+      status: httpStatus.UNAUTHORIZED
+    });
+    next(error);
   }
 };

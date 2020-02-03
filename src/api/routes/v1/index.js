@@ -1,6 +1,7 @@
 const express = require('express');
 const authRoutes = require('./auth.route');
 const questionRoutes = require('./question.route');
+const voteRoutes = require('./vote.route');
 const router = express.Router();
 
 /**
@@ -15,4 +16,5 @@ router.get('/', (req, res) =>
 
 router.use('/auth', authRoutes);
 router.use('/questions', questionRoutes);
+router.use('/votes', voteRoutes);
 module.exports = router;
