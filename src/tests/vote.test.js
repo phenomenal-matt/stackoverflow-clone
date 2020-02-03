@@ -9,8 +9,8 @@ const Vote = require('../api/models/vote.model');
 
 describe('Question API', () => {
   const question = {
-    title: 'How do you do AES-256-CBC encryption in nodejs?',
-    body: 'Is this a test question?'
+    title: 'How do I do AES-256-CBC encryption in nodejs?',
+    body: 'This is a crypto question'
   };
 
   const user1 = {
@@ -25,9 +25,9 @@ describe('Question API', () => {
   };
 
   const user3 = {
-    email: 'bran_stark@example.com',
-    password: '123456',
-    name: 'Brandon Stark'
+    email: 'tyrion_lannister@example.com',
+    password: '652ws4fa',
+    name: 'Lord Tyrion Lannister'
   };
 
   const upvote = {
