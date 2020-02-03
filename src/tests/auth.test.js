@@ -3,28 +3,26 @@ const request = require('supertest');
 const httpStatus = require('http-status');
 const { expect } = require('chai');
 const bcrypt = require('bcrypt');
-// const moment = require('moment-timezone');
-const app = require('../../index');
-const User = require('../../api/models/user.model');
+const app = require('../index');
+const User = require('../api/models/user.model');
 
 describe('Authentication API', () => {
   let user1;
   let user2;
 
-  
   beforeEach(async () => {
     user1 = {
       email: 'john_snow@example.com',
       password: 'mypassword',
       name: 'John Snow'
     };
-  
+
     user2 = {
       email: 'arya_stark@example.com',
       password: '123456',
       name: 'Arya Stark'
     };
-  
+
     const salt = await bcrypt.genSalt(1);
     const hashedPass = await bcrypt.hash(user1.password, salt);
     await User.create({
@@ -126,7 +124,7 @@ describe('Authentication API', () => {
         });
     });
 
-    it("should return error when user password is incorrect", () => {
+    it('should return error when user password is incorrect', () => {
       user1.password = 'aaa';
 
       return request(app)
@@ -140,7 +138,7 @@ describe('Authentication API', () => {
         });
     });
 
-    it("should return error when user email is incorrect ", () => {
+    it('should return error when user email is incorrect ', () => {
       user1.email = 'a@example.com';
 
       return request(app)
@@ -153,6 +151,5 @@ describe('Authentication API', () => {
           expect(message).to.be.equal('Incorrect email or password');
         });
     });
-
   });
 });

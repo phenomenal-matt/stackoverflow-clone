@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 const {
   jwtSecret,
   jwtExpirationInterval
 } = require('../../config/environment-variables');
-const jwt = require('jsonwebtoken');
 
 const Schema = mongoose.Schema;
 const userSchema = new Schema(

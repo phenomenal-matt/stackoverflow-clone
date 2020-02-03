@@ -57,10 +57,10 @@ exports.login = async (req, res, next) => {
   try {
     let user = await User.findOne({ email: req.body.email });
     if (!user || !bcrypt.compareSync(req.body.password, user.password)) {
-      const err = {
+      const err = new APIError({
         status: httpStatus.UNAUTHORIZED,
         message: 'Incorrect email or password'
-      };
+      });
       return next(err);
     }
 

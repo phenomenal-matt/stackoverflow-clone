@@ -37,42 +37,6 @@ exports.converter = (err, req, res, next) => {
       status: err.status,
       stack: err.stack
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
   }
 
   return errorhandler(convertedError, req, res);
