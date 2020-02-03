@@ -10,8 +10,8 @@ const Question = require('../api/models/question.model');
 describe('Question API', () => {
   let testQuestions = {
     validQuestion: {
-      title: 'How do you do AES-256-CBC encryption in nodejs?',
-      body: 'Is this a test question?'
+      title: 'How do I do AES-256-CBC encryption in nodejs?',
+      body: 'This is a crypto question'
     },
     questionWithoutBody: {
       title: 'Question'
