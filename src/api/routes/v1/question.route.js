@@ -11,7 +11,7 @@ const {
 const router = express.Router();
 
 /**
- * @api {post} v1/question/
+ * @api {post} v1/questions/
  */
 router.route('/').post(isAuthorized, validate(askSchema), controller.ask);
 
