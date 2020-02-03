@@ -10,7 +10,9 @@ module.exports = {
       .min(6)
       .max(128)
       .required(),
-    name: Joi.string().max(128)
+    name: Joi.string()
+      .max(128)
+      .required()
   }).unknown(true),
 
   // POST /v1/auth/login
