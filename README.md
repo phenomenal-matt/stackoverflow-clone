@@ -6,7 +6,7 @@ Stackoverflow-clone is a lite version of stackoverflow api
 
 ## Features
 
-- User can Register.
+- User can register.
 - User can log in.
 - User can ask questions.
 - User can answer questions.
@@ -14,16 +14,13 @@ Stackoverflow-clone is a lite version of stackoverflow api
 - User can get a question with answers.
 - User can upvote or downvote a question.
 - User can search for questions, users, answers
-- User can be notified by email about answers to posted user's question if he/she subscribed to it when asking the question.
+- User can be notified by email about answers to posted user's question if they subscribed to it when asking the question.
 
 ## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Installing
 
 - Clone the repository `git clone https://github.com/phenomenal-matt/stackoverflow-clone.git`
-- Navigate to the location of the folder
 - Run `npm install` to install dependencies
 - Run `npm start` to get the app started on your local machine
 
