@@ -141,17 +141,7 @@
         "tags": ["Question"],
         "operationId": "QuestionsPost",
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": ""
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -209,7 +199,12 @@
               "message": "Authorization is required"
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       },
       "get": {
         "description": "Allows users to get all questions. This returns the array of all questions.",
@@ -310,15 +305,6 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": ""
-          },
-          {
             "name": "id",
             "in": "path",
             "required": true,
@@ -366,7 +352,13 @@
               "required": ["result", "data"]
             }
           }
-        }
+        },
+
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       }
     },
     "/votes/question/{id}": {
@@ -385,15 +377,6 @@
             },
             "example": "5d99b8a55fd020127207cdee",
             "description": "id of the question to vote for"
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": ""
           }
         ],
         "requestBody": {
@@ -420,7 +403,12 @@
               "$ref": "#/components/schemas/VoteResponse"
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       }
     },
     "/search": {
@@ -722,6 +710,13 @@
           }
         },
         "required": ["result", "message"]
+      }
+    },
+    "securitySchemes": {
+      "Authorization": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization"
       }
     }
   },
