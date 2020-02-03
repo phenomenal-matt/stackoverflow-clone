@@ -1,6 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
 const compress = require('compression');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('../swagger.json');
 const routes = require('../api/routes/v1');
 const { requestLogsFormat } = require('./environment-variables');
 
@@ -17,6 +19,9 @@ app.use(express.json());
 
 // gzip compression of response
 app.use(compress());
+
+// open api docs
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Mount api v1 routes
 app.use('/v1', routes);

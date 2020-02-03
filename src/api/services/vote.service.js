@@ -66,7 +66,6 @@ class VoteService {
       await Question.updateOne(
         { _id: questionId },
         {
-          $pull: { votes: existingVote._id },
           $inc: { voteCount: voteCountModifier }
         }
       );

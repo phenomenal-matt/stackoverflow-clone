@@ -1,0 +1,746 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.3.0",
+    "title": "Stackoveflow clone",
+    "description": "A lite clone of Stackoverflow",
+    "contact": {
+      "name": "Matthew Akhaze"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:9001/v1/",
+      "description": "Local server"
+    }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "description": "Registers a new user. A user provides name, email and password, email address is unique. A JWT is issued on successful registration.",
+        "summary": "Sign up",
+        "tags": ["Auth"],
+        "operationId": "AuthRegister",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "example": {
+                  "email": "john_snow@example.com",
+                  "password": "mypassword",
+                  "name": "John Snow"
+                },
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": ["email", "password", "name"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Registration Successful",
+            "schema": {
+              "$ref": "#/components/schemas/AuthenticationResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "result": "ERROR",
+              "message": "Validation Error",
+              "errors": "\"email\" is required"
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "description": "User login. A user provides email and password. User authorization token is returned if credentials are correct",
+        "summary": "Sign in",
+        "tags": ["Auth"],
+        "operationId": "AuthLogin",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "example": {
+                  "email": "john_snow@example.com",
+                  "password": "mypassword"
+                },
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": ["email", "password"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Registration Successful",
+            "schema": {
+              "$ref": "#/components/schemas/AuthenticationResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "result": "ERROR",
+              "message": "Validation Error",
+              "errors": "\"email\" is required"
+            }
+          },
+          "409": {
+            "description": "Incorrect credentials",
+
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "result": "ERROR",
+              "message": "Incorrect email or password"
+            }
+          }
+        }
+      }
+    },
+    "/questions": {
+      "post": {
+        "description": "User can ask a question. Question title and body is required, user can also subscribe to be notified when the question receives an answer. The question is returned in the response.",
+        "summary": "Ask Question",
+        "tags": ["Question"],
+        "operationId": "QuestionsPost",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": ""
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "required": true,
+              "description": "",
+              "schema": {
+                "example": {
+                  "title": "How do I do AES-256-CBC encryption in nodejs?",
+                  "body": "This is a crypto question",
+                  "subscribe": true
+                },
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "body": {
+                    "type": "string"
+                  },
+                  "subscribe": {
+                    "type": "boolean"
+                  }
+                },
+                "required": ["title", "body"]
+              }
+            }
+          }
+        },
+
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/components/schemas/Question"
+                }
+              },
+              "required": ["status", "data"]
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "result": "ERROR",
+              "message": "Authorization is required"
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Allows users to get all questions. This returns the array of all questions.",
+        "summary": "Get questions",
+        "tags": ["Question"],
+        "operationId": "QuestionsGet",
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "example": {
+                "result": "SUCCESS",
+                "data": []
+              },
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Question"
+                  }
+                }
+              },
+              "required": ["result", "data"]
+            }
+          }
+        }
+      }
+    },
+    "/questions/{id}": {
+      "get": {
+        "description": "Allows users to view a given question by ID. This returns the question along with the answers posted for the question.",
+        "summary": "Get a question",
+        "tags": ["Question"],
+        "operationId": "QuestionsGet",
+        "produces": ["application/json; charset=utf-8"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "example": {
+                "result": "SUCCESS",
+                "data": {
+                  "result": "SUCCESS",
+                  "data": {
+                    "subscribe": false,
+                    "answers": [],
+                    "votes": [],
+                    "voteCount": 0,
+                    "_id": "5e3857089540327445383c75",
+                    "title": "How do I do AES-256-CBC encryption in nodejs?",
+                    "body": "This is a crypto question",
+                    "author": {
+                      "_id": "5e3857089540327445383c72",
+                      "name": "John Snow"
+                    },
+                    "createdAt": "2020-02-03T17:23:20.832Z",
+                    "updatedAt": "2020-02-03T17:23:20.899Z",
+                    "__v": 0
+                  }
+                }
+              },
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/components/schemas/Question"
+                }
+              },
+              "required": ["result", "data"]
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Allows user to answer a question. The body is required and the answer is returned in the response.",
+        "summary": "Answer a question",
+        "tags": ["Question"],
+        "operationId": "QuestionsPost",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": ""
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": ""
+          }
+        ],
+
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "required": true,
+              "description": "",
+              "schema": {
+                "example": {
+                  "body": "This is the answer to your question"
+                },
+                "type": "object",
+                "properties": {
+                  "body": {
+                    "type": "string"
+                  }
+                },
+                "required": ["body"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/components/schemas/Answer"
+                }
+              },
+              "required": ["result", "data"]
+            }
+          }
+        }
+      }
+    },
+    "/votes/question/{id}": {
+      "post": {
+        "description": "User can vote a question. Cast a vote by sending 'up' or 'down'. User can also change their votes or send the same value again to undo a vote",
+        "summary": "Vote question",
+        "tags": ["Vote"],
+        "operationId": "VoteQuestion",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "5d99b8a55fd020127207cdee",
+            "description": "id of the question to vote for"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": ""
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "",
+          "schema": {
+            "example": {
+              "vote": "up"
+            },
+            "type": "object",
+            "properties": {
+              "vote": {
+                "type": "string",
+                "enum": ["up", "down"]
+              }
+            },
+            "required": ["vote"]
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/components/schemas/VoteResponse"
+            }
+          }
+        }
+      }
+    },
+    "/search": {
+      "get": {
+        "description": "Search questions, users, answers.",
+        "summary": "Search",
+        "tags": ["Search"],
+        "operationId": "SearchGet",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The search query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/components/schemas/SearchResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+      "AuthenticationResponse": {
+        "title": "AuthenticationResponse",
+        "example": {
+          "result": "SUCCESS",
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTMzM2Q5MDFhM2E2MzM4N2EwNzhlOTUiLCJuYW1lIjoiRGFuaWVsIFNvdXNhIiwiaWF0IjoxNTgwNzQ3NzY2LCJleHAiOjE1ODA4MzQxNjZ9.1L0VawlRWoE6NOKGclML96dEVl8phBNFe4er1B_IqFo",
+          "email": "john_snow@example.com",
+          "name": "John Snow"
+        },
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": ["result", "token", "email", "name"]
+      },
+      "User": {
+        "title": "User",
+        "type": "object",
+        "properties": {
+          "questions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Question"
+            }
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Answer"
+            }
+          },
+          "_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": ["_id", "name"]
+      },
+      "Question": {
+        "title": "Question",
+        "type": "object",
+        "properties": {
+          "subscribe": {
+            "type": "boolean"
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Answer"
+            }
+          },
+          "votes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "voteCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "author": {
+            "$ref": "#/components/schemas/Author"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "__v": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": ["_id", "title"],
+        "example": {
+          "result": "SUCCESS",
+          "data": {
+            "subscribe": false,
+            "answers": [],
+            "votes": ["5e3857089540327445383c77"],
+            "voteCount": 1,
+            "_id": "5e3857089540327445383c75",
+            "title": "How do I do AES-256-CBC encryption in nodejs?",
+            "body": "This is a crypto question",
+            "author": {
+              "_id": "5e3857089540327445383c72",
+              "name": "John Snow"
+            },
+            "createdAt": "2020-02-03T17:23:20.832Z",
+            "updatedAt": "2020-02-03T17:23:20.885Z",
+            "__v": 0
+          }
+        }
+      },
+      "Author": {
+        "title": "Author",
+        "example": {
+          "_id": "5e3857089540327445383c72",
+          "name": "John Snow"
+        },
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": ["_id", "name"]
+      },
+      "Answer": {
+        "title": "Answer",
+        "example": {
+          "result": "SUCCESS",
+          "data": {
+            "_id": "5e3857089540327445383c71",
+            "body": "This is the answer to your question",
+            "author": {
+              "_id": "5e3857089540327445383c6e",
+              "name": "Brandon Stark"
+            },
+            "question": {
+              "_id": "5e3857089540327445383c6f",
+              "title": "How do I do AES-256-CBC encryption in nodejs?"
+            },
+            "createdAt": "2020-02-03T17:23:20.618Z",
+            "updatedAt": "2020-02-03T17:23:20.618Z",
+            "__v": 0
+          }
+        },
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "author": {
+            "$ref": "#/components/schemas/Author"
+          },
+          "question": {
+            "$ref": "#/components/schemas/Question"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "__v": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": ["_id", "body"]
+      },
+      "VoteResponse": {
+        "title": "VoteResponse",
+        "example": {
+          "result": "SUCCESS",
+          "data": { "message": "Question upvoted successfully" }
+        },
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            }
+          },
+          "result": {
+            "type": "string"
+          }
+        },
+        "required": ["result", "data"]
+      },
+      "SearchResponse": {
+        "title": "SearchResponse",
+        "example": {
+          "result": "SUCCESS",
+          "data": {
+            "questions": [],
+            "users": [
+              {
+                "_id": "5e33f559ab57bc255f27e0b6",
+                "name": "Arya Stark"
+              }
+            ],
+            "answers": []
+          }
+        },
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "users": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/User"
+                }
+              },
+              "questions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Question"
+                }
+              },
+              "answers": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Answer"
+                }
+              }
+            }
+          },
+          "result": {
+            "type": "string"
+          }
+        },
+        "required": ["result", "data"]
+      },
+      "ErrorResponse": {
+        "title": "ErrorResponse",
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "string"
+          }
+        },
+        "required": ["result", "message"]
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "User authentication."
+    },
+    {
+      "name": "Question",
+      "description": "Ask questions, get questions and answer questions"
+    },
+    {
+      "name": "Vote",
+      "description": "Vote for a question."
+    },
+    {
+      "name": "Search",
+      "description": "Search for questions, users or answers."
+    }
+  ]
+}
