@@ -77,7 +77,6 @@ describe('Question API', () => {
         .post(`/v1/votes/question/${questionId}`)
         .send(upvote)
         .set('Authorization', token2);
-      console.log(JSON.stringify(response.body));
 
       expect(response.status).to.eqls(httpStatus.OK);
       expect(response.body.result).to.eqls('SUCCESS');
@@ -86,7 +85,6 @@ describe('Question API', () => {
       );
 
       const response2 = await request(app).get(`/v1/questions/${questionId}`);
-      console.log(JSON.stringify(response2.body));
 
       expect(response.status).to.eqls(httpStatus.OK);
       expect(response.body.result).to.eqls('SUCCESS');
@@ -99,7 +97,6 @@ describe('Question API', () => {
         .post(`/v1/votes/question/${questionId}`)
         .send(downvote)
         .set('Authorization', token3);
-      console.log(JSON.stringify(response.body));
 
       expect(response.status).to.eqls(httpStatus.OK);
       expect(response.body.result).to.eqls('SUCCESS');
@@ -108,7 +105,6 @@ describe('Question API', () => {
       );
 
       const response2 = await request(app).get(`/v1/questions/${questionId}`);
-      console.log(JSON.stringify(response2.body));
 
       expect(response.status).to.eqls(httpStatus.OK);
       expect(response.body.result).to.eqls('SUCCESS');
@@ -121,13 +117,11 @@ describe('Question API', () => {
         .post(`/v1/votes/question/${questionId}`)
         .send(upvote)
         .set('Authorization', token2);
-      console.log(JSON.stringify(response.body));
 
       expect(response.status).to.eqls(httpStatus.OK);
       expect(response.body.result).to.eqls('SUCCESS');
 
       const response2 = await request(app).get(`/v1/questions/${questionId}`);
-      console.log(JSON.stringify(response2.body));
 
       expect(response.status).to.eqls(httpStatus.OK);
       expect(response.body.result).to.eqls('SUCCESS');
@@ -140,13 +134,11 @@ describe('Question API', () => {
         .post(`/v1/votes/question/${questionId}`)
         .send(upvote)
         .set('Authorization', token3);
-      console.log(JSON.stringify(response.body));
 
       expect(response.status).to.eqls(httpStatus.OK);
       expect(response.body.result).to.eqls('SUCCESS');
 
       const response2 = await request(app).get(`/v1/questions/${questionId}`);
-      console.log(JSON.stringify(response2.body));
 
       expect(response.status).to.eqls(httpStatus.OK);
       expect(response.body.result).to.eqls('SUCCESS');
