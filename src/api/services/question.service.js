@@ -5,6 +5,8 @@ const Question = require('../models/question.model');
 const Answer = require('../models/answer.model');
 const APIError = require('../extensions/APIError');
 const result = require('../utils/constants/result.constant');
+const notifier = require('../utils/notifier/mail.notifier');
+const logger = require('../../config/logger');
 
 /**
  * @class QuestionService
@@ -90,7 +92,7 @@ class QuestionService {
 
     const question = await Question.findById(questionId).populate(
       'author',
-      'name'
+      'name email'
     );
     if (!question) {
       throw new APIError({
@@ -110,16 +112,26 @@ class QuestionService {
       { $push: { answers: answer._id } }
     );
 
-    const responseAnswer = await Answer.findById(answer._id)
+    const populatedAnswer = await Answer.findById(answer._id)
       .populate('author', 'name')
       .populate('question', 'title');
     if (question.subscribe) {
       //Send email notification to the user who asked the question
+      const message = `Dear ${question.author.name}<br/> Your question ${question.title} has received a new answer.<br/>`;
+      try {
+        await notifier.send(
+          question.author.email,
+          'New Answer to your question',
+          message
+        );
+      } catch (err) {
+        logger.info(err);
+      }
     }
 
     const response = {
       result: result.SUCCESS,
-      data: responseAnswer
+      data: populatedAnswer
     };
     return res.status(httpStatus.OK).send(response);
   }
