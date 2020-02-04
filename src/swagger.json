@@ -3,7 +3,7 @@
   "info": {
     "version": "1.3.0",
     "title": "Stackoveflow clone",
-    "description": "A lite clone of Stackoverflow",
+    "description": "A lite clone of Stackoverflow. Some endpoints require authorization. Register a new user to get a token to use in authorization",
     "contact": {
       "name": "Matthew Akhaze"
     }
@@ -17,7 +17,7 @@
   "paths": {
     "/auth/register": {
       "post": {
-        "description": "Registers a new user. A user provides name, email and password, email address is unique. A JWT is issued on successful registration.",
+        "description": "Registers a new user. A user provides name, email and password, email address is unique. An authorization token is issued on successful registration.",
         "summary": "Sign up",
         "tags": ["Auth"],
         "operationId": "AuthRegister",
@@ -136,7 +136,7 @@
     },
     "/questions": {
       "post": {
-        "description": "User can ask a question. Question title and body is required, user can also subscribe to be notified when the question receives an answer. The question is returned in the response.",
+        "description": "User can ask a question. User authorization token is required. Question title and body are required, user can also subscribe to be notified when the question receives an answer. The question is returned in the response.",
         "summary": "Ask Question",
         "tags": ["Question"],
         "operationId": "QuestionsPost",
@@ -298,7 +298,7 @@
         }
       },
       "post": {
-        "description": "Allows user to answer a question. The body is required and the answer is returned in the response.",
+        "description": "Allows user to answer a question. User authorization token is required. The body is required and the answer is returned in the response.",
         "summary": "Answer a question",
         "tags": ["Question"],
         "operationId": "QuestionsPost",
@@ -363,7 +363,7 @@
     },
     "/votes/question/{id}": {
       "post": {
-        "description": "User can vote a question. Cast a vote by sending 'up' or 'down'. User can also change their votes or send the same value again to undo a vote",
+        "description": "User can vote a question. User authorization token is required. Cast a vote by sending 'up' or 'down'. User can also change their votes or send the same value again to undo a vote",
         "summary": "Vote question",
         "tags": ["Vote"],
         "operationId": "VoteQuestion",
