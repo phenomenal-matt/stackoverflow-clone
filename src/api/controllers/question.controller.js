@@ -25,7 +25,7 @@ exports.list = async (req, res, next) => {
 };
 
 /**
- * Get a questions
+ * Get a question
  * @public
  */
 exports.fetch = async (req, res, next) => {
