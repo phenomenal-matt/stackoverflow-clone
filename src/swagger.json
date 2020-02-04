@@ -381,19 +381,23 @@
         ],
         "requestBody": {
           "required": true,
-          "description": "",
-          "schema": {
-            "example": {
-              "vote": "up"
-            },
-            "type": "object",
-            "properties": {
-              "vote": {
-                "type": "string",
-                "enum": ["up", "down"]
+          "content": {
+            "application/json": {
+              "description": "",
+              "schema": {
+                "example": {
+                  "vote": "up"
+                },
+                "type": "object",
+                "properties": {
+                  "vote": {
+                    "type": "string",
+                    "enum": ["up", "down"]
+                  }
+                },
+                "required": ["vote"]
               }
-            },
-            "required": ["vote"]
+            }
           }
         },
         "responses": {

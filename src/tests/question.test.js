@@ -178,7 +178,7 @@ describe('Question API', () => {
 
     it('should fail to answer a question that does not exist', async () => {
       const response = await request(app)
-        .post('/v1/questions/5e37e6a4686cfb017dec618b')
+        .post('/v1/questions/5e37e6a4686cfb017dec618')
         .send(answer)
         .set('Authorization', token);
 
