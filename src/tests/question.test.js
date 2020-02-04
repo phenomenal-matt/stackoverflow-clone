@@ -11,7 +11,8 @@ describe('Question API', () => {
   let testQuestions = {
     validQuestion: {
       title: 'How do I do AES-256-CBC encryption in nodejs?',
-      body: 'This is a crypto question'
+      body: 'This is a crypto question',
+      subscribe: true
     },
     questionWithoutBody: {
       title: 'Question'
